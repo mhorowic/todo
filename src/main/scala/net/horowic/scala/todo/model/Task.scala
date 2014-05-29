@@ -13,8 +13,8 @@ import scala.Option
 
 case class Task(id: Option[Int], name: String, description: String, dueDate: Date, priorityId: Option[Int])
 
-class Task(tag: Tag) extends Table[Task](tag, "task") {
-  var priorities = TableQuery[Priorities]
+class Tasks(tag: Tag) extends Table[Task](tag, "task") {
+  var tasks = TableQuery[Tasks]
 
   def id = column[Option[Int]]("task_id", O.PrimaryKey, O.AutoInc)
 
@@ -26,7 +26,7 @@ class Task(tag: Tag) extends Table[Task](tag, "task") {
 
   def priorityId = column[Option[Int]]("priority_id")
 
-  def * = (id, name, description, dueDate, priorityId) <> (Task.tupled, Task.unapply)
+  def * = (id, name, description, dueDate, priorityId) <>(Task.tupled, Task.unapply)
 
-  def priority = foreignKey("tasks_priority_id_fkey", priorityId, priorities)(_.id)
+  def priority = foreignKey("tasks_priority_id_fkey", priorityId, tasks)(_.id)
 }

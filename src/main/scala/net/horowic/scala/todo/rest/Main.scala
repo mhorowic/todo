@@ -12,13 +12,13 @@ import net.horowic.scala.todo.model.{PriorityDaoImpl, PriorityService, Priority,
  * Date: 17.03.14 20:47
  */
 
-object Main extends App with SimpleRoutingApp with DefaultJsonProtocol with SprayJsonSupport with PriorityService with PriorityDaoImpl{
+object Main extends App with SimpleRoutingApp with DefaultJsonProtocol with SprayJsonSupport with PriorityService with PriorityDaoImpl {
 
   implicit val system = ActorSystem("my-system")
   implicit val format = jsonFormat2(Priority)
 
   startServer(interface = "localhost", port = 8080) {
-    path("readAll") {
+    path("priorities") {
       get {
         respondWithMediaType(MediaTypes.`application/json`) {
           complete {
@@ -44,7 +44,7 @@ object Main extends App with SimpleRoutingApp with DefaultJsonProtocol with Spra
               StatusCodes.OK
             }
         }
-      }~
+      } ~
       path("create") {
         entity(as[Priority]) {
           priority =>
