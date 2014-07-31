@@ -1,20 +1,32 @@
 package net.horowic.scala.todo
 
-import net.horowic.scala.todo.model.{PriorityDaoImpl, PriorityService}
+import net.horowic.scala.todo.component.Configuration
+import net.horowic.scala.todo.model.Priority
+
 
 /**
  * User: mhorowic
  * Date: 23.03.14 19:30
  */
-object MainTest extends PriorityService with PriorityDaoImpl {
+object MainTest {
   def main(args: Array[String]) {
-    println(readAll())
+    val priorityService = Configuration.priorityService
 
-    println(create("test"))
-    println(readAll())
+    println(priorityService.readAll())
 
-    //update(15, "abcde")
-    //println(readAll())
+    priorityService.delete(23)
+
+    println(priorityService.readAll())
+
+    val id = priorityService.create(Priority(None, "Cake Test"))
+
+    println(priorityService.readAll())
+
+    priorityService.update(Priority(Some(id), "Cake_tst"))
+
+    println(priorityService.readAll())
+
+    println(priorityService.findById(Some(id)))
 
   }
 }
