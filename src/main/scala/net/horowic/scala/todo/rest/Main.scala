@@ -20,46 +20,50 @@ object Main extends App with SimpleRoutingApp with DefaultJsonProtocol with Spra
   val prioritiesService = Configuration.priorityService
 
   startServer(interface = "localhost", port = 8080) {
-    path("priorities") {
-      get {
-        respondWithMediaType(MediaTypes.`application/json`) {
-          complete {
-            prioritiesService.readAll()
-          }
-        }
-      }
-    } ~
-      path("shutdown") {
+    pathPrefix("Todo") {
+      path("priorities") {
         get {
-          complete {
-            system.shutdown()
-            "exit"
+          respondWithMediaType(MediaTypes.`application/json`) {
+            complete {
+              prioritiesService.readAll()
+            }
           }
         }
       } ~
-      path("update") {
-        entity(as[Priority]) {
-          priority =>
+        path("shutdown") {
+          get {
             complete {
-              //request with content type application/json: {"id":0, "name": "nazwa"}
-              prioritiesService.update(priority)
-              StatusCodes.OK
+              system.shutdown()
+              "exit"
             }
-        }
-      } ~
-      path("create") {
-        entity(as[Priority]) {
-          priority =>
-            complete {
-              //request with content type application/json: { "name": "nazwa"}
-              prioritiesService.create(priority)
-              StatusCodes.OK
-            }
-        }
-      } ~
-      path("Todo") {
-        getFromDirectory("webapp/index.html")
+          }
+        } ~
+        path("update") {
+          entity(as[Priority]) {
+            priority =>
+              complete {
+                //request with content type application/json: {"id":0, "name": "nazwa"}
+                prioritiesService.update(priority)
+                StatusCodes.OK
+              }
+          }
+        } ~
+        path("create") {
+          entity(as[Priority]) {
+            priority =>
+              complete {
+                //request with content type application/json: { "name": "nazwa"}
+                prioritiesService.create(priority)
+                StatusCodes.OK
+              }
+          }
+        } ~
+        path("") {
+          getFromResource("web/index.html")
+        } ~ {
+        getFromResourceDirectory("web")
       }
+    }
   }
 }
 
