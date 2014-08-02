@@ -3,10 +3,13 @@ package net.horowic.scala.todo.rest
 import spray.routing.SimpleRoutingApp
 import akka.actor.ActorSystem
 import spray.http.{StatusCodes, MediaTypes}
-import spray.json.DefaultJsonProtocol
+import spray.json._
 import spray.httpx.SprayJsonSupport
-import net.horowic.scala.todo.model.Priority
 import net.horowic.scala.todo.component.Configuration
+import java.sql.Date
+import net.horowic.scala.todo.model.Priority
+import net.horowic.scala.todo.model.Task
+import scala.Some
 
 /**
  * User: mhorowic
@@ -16,47 +19,114 @@ import net.horowic.scala.todo.component.Configuration
 object Main extends App with SimpleRoutingApp with DefaultJsonProtocol with SprayJsonSupport {
 
   implicit val system = ActorSystem("my-system")
-  implicit val format = jsonFormat2(Priority)
-  val prioritiesService = Configuration.priorityService
+  implicit val priorityFormat = jsonFormat2(Priority)
+
+  implicit object DateJsonFormat extends JsonFormat[Date] {
+    def write(date: Date) = JsString(date.toString)
+
+    def read(value: JsValue) = value match {
+      case JsString(date) => Date.valueOf(date)
+      case x => throw new DeserializationException("Expected Date as JsString, but got " + x)
+    }
+  }
+
+  implicit val taskFormat = jsonFormat5(Task)
+
+
+  val priorityService = Configuration.priorityService
+  val taskService = Configuration.taskService
 
   startServer(interface = "localhost", port = 8080) {
     pathPrefix("Todo") {
-      path("priorities") {
-        get {
-          respondWithMediaType(MediaTypes.`application/json`) {
-            complete {
-              prioritiesService.readAll()
-            }
-          }
-        }
-      } ~
-        path("shutdown") {
+      pathPrefix("priorities") {
+        path("") {
           get {
-            complete {
-              system.shutdown()
-              "exit"
+            respondWithMediaType(MediaTypes.`application/json`) {
+              complete {
+                priorityService.readAll()
+              }
             }
-          }
-        } ~
-        path("update") {
-          entity(as[Priority]) {
-            priority =>
-              complete {
-                //request with content type application/json: {"id":0, "name": "nazwa"}
-                prioritiesService.update(priority)
-                StatusCodes.OK
+          } ~
+            put {
+              entity(as[Priority]) {
+                priority =>
+                  complete {
+                    priorityService.update(priority)
+                    StatusCodes.OK
+                  }
               }
-          }
-        } ~
-        path("create") {
-          entity(as[Priority]) {
-            priority =>
-              complete {
-                //request with content type application/json: { "name": "nazwa"}
-                prioritiesService.create(priority)
-                StatusCodes.OK
+            } ~
+            post {
+              entity(as[Priority]) {
+                priority =>
+                  complete {
+                    priorityService.create(priority)
+                    StatusCodes.OK
+                  }
               }
+            }
+        } ~
+          path(IntNumber) {
+            id =>
+              get {
+                respondWithMediaType(MediaTypes.`application/json`) {
+                  complete {
+                    priorityService.findById(Some(id))
+                  }
+                }
+              } ~
+                delete {
+                  complete {
+                    priorityService.delete(id)
+                    StatusCodes.OK
+                  }
+                }
           }
+      } ~
+        pathPrefix("tasks") {
+          path("") {
+            get {
+              respondWithMediaType(MediaTypes.`application/json`) {
+                complete {
+                  taskService.readAll()
+                }
+              }
+            } ~
+              put {
+                entity(as[Task]) {
+                  task =>
+                    complete {
+                      taskService.update(task)
+                      StatusCodes.OK
+                    }
+                }
+              } ~
+              post {
+                entity(as[Task]) {
+                  task =>
+                    complete {
+                      taskService.create(task)
+                      StatusCodes.OK
+                    }
+                }
+              }
+          } ~
+            path(IntNumber) {
+              id =>
+                get {
+                  respondWithMediaType(MediaTypes.`application/json`) {
+                    complete {
+                      taskService.findById(Some(id))
+                    }
+                  }
+                } ~
+                  delete {
+                    complete {
+                      taskService.delete(id)
+                      StatusCodes.OK
+                    }
+                  }
+            }
         } ~
         path("") {
           getFromResource("web/index.html")
@@ -65,5 +135,8 @@ object Main extends App with SimpleRoutingApp with DefaultJsonProtocol with Spra
       }
     }
   }
+
 }
+
+
 
