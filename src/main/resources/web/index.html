@@ -5,8 +5,13 @@
     <title>TODO app - manage your tasks easily!</title>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="style/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.11/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.11/angular-route.js"></script>
+    <script src="//underscorejs.org/underscore.js"></script>
+    <script src="js/todo.js"></script>
+    <script src="js/controllers.js"></script>
 </head>
-<body>
+<body ng-app="todoApp">
 <div class="container">
     <div class="panel panel-default">
         <div class="panel-heading" style="padding: 0px;">
@@ -16,7 +21,10 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="#add"><span class="glyphicon glyphicon-plus"></span></a>
+                        <a href="#priorities"><span class="glyphicon glyphicon-sort"></span></a>
+                    </li>
+                    <li>
+                        <a href="#tasks/add"><span class="glyphicon glyphicon-plus"></span></a>
                     </li>
                     <li>
                         <a href="#search"><span class="glyphicon glyphicon-search"></span></a>
@@ -28,7 +36,9 @@
             </div>
         </div>
         <div class="panel-body">
-            List of tasks
+            <div ng-view>
+
+            </div>
         </div>
     </div>
 </div>
