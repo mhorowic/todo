@@ -1,1 +1,9 @@
-priorities
+priorities {{ priorities.length }}
+
+<div class="list-group">
+    <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+    <a ng-repeat="priority in priorities"
+       href="#/priorities/{{ priority.id }}"
+       class="list-group-item">
+        <strong>Priority:</strong> {{ priority.name }}</a><br>
+</div>

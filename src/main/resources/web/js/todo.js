@@ -1,6 +1,6 @@
-var todoApp = angular.module('todoApp', [ 'ngRoute', 'todoControllers' ]);
+var todoApp = angular.module('todoApp', [ 'ngRoute', 'ui.bootstrap', 'todoControllers', 'restangular' ]);
 
-todoApp.config([ '$routeProvider', function($routeProvider) {
+todoApp.config([ '$routeProvider', 'RestangularProvider', function($routeProvider, RestangularProvider) {
 	$routeProvider.when('/', {
 		templateUrl : 'tasks.html',
 		controller : 'PriorityController'
@@ -27,3 +27,44 @@ todoApp.config([ '$routeProvider', function($routeProvider) {
 		redirectTo : '/error'
 	});
 } ]);
+
+todoApp.factory('api', ['restangular', function(restangular){
+    return {
+        priorities:{
+            search: function(){
+                 Restangular.all('Todo/priorities').getList();
+            }, save: function(entity){
+                 Restangular.all('Todo/priorities').post(entity);
+            }, update: function(entity){
+                 entity.put().$object;
+            }, read: function(id){
+                 Restangular.one("Todo/priorities", id).get();
+            }, remove: function(id){
+                 Restangular.one('Todo/priorities', id).delete();
+            }
+        }, tasks:{
+            search: function(){
+                Restangular.all('Todo/tasks').getList();
+            }, save: function(entity){
+                Restangular.all('Todo/tasks').post(entity);
+            }, update: function(entity){
+                entity.put().$object;
+            }, read: function(id){
+                Restangular.one("Todo/tasks", id).get();
+            }, remove: function(id){
+                Restangular.one('Todo/tasks', id).delete();
+            }
+        }
+    }
+}]);
+
+todoApp.service('todoService',[ 'api', function(api){
+   var priorities = undefined;
+   var tasks = undefined;
+
+   this.fetchPriorities = function(){
+       if(!priorities){
+            api.priorities.search();
+       }
+   }
+}]);
