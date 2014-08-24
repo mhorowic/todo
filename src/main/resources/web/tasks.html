@@ -1,1 +1,26 @@
-tasks
+<div class="panel panel-default">
+    <div class="panel-heading">Tasks</div>
+
+    <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+
+    <table class="table" ng-show="tasks.length > 0">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Due date</th>
+                <th>Priority</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="task in tasks">
+                <td>{{ $index + 1 }}</td>
+                <td>{{ task.name }}</td>
+                <td>{{ task.description }}</td>
+                <td>{{ task.dueDate }}</td>
+                <td><a href="#/priorities/{{ task.priorityId }}">{{ task.priorityId }}</a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
