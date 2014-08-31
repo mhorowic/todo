@@ -1,0 +1,32 @@
+<a data-target="#editModal" data-toggle="modal"><i style="cursor: pointer; margin: 4px;" class="glyphicon glyphicon-pencil"></i></a>
+<a data-target="#ensureModal" data-toggle="modal"><i style="cursor: pointer; margin: 4px;" class="glyphicon glyphicon-trash"></i></a>
+
+<div class="modal fade" id="ensureModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                {{ deleteQuestion }}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" ng-click="deleteAction({id: $id})">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div ng-include src="editTemplate">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" ng-click="editAction({id: id})">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>

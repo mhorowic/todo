@@ -102,3 +102,16 @@ todoApp.service('taskService', ['api',
 
     }
 ]);
+
+todoApp.directive('tableAction', function(){
+    return {
+        restrict: 'E',
+        scope: {
+            deleteQuestion: '@',
+            deleteAction: '&',
+            editTemplate: '@',
+            editAction: '&'
+        },
+        templateUrl: 'directive/table-action.html'
+    };
+});

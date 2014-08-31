@@ -72,6 +72,14 @@ todoControllers.controller('TaskController', ['$scope', '$routeParams', 'taskSer
             $scope.alerts.splice(index, 1);
         };
 
+        $scope.deleteTask = function(id) {
+            console.log('deleting task with id ' + id);
+        };
+
+        $scope.editTask = function(id) {
+            console.log('edit task with id ' + id);
+        };
+
         $scope.loadTasks();
     }
 ]);
