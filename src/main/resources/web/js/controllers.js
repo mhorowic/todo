@@ -42,8 +42,9 @@ todoControllers.controller('TaskController', ['$scope', '$routeParams', 'taskSer
     function($scope, $routeParams, taskService, api) {
         $scope.alerts = [];
         $scope.tasks = [];
+        $scope.inProgress = false;
 
-        $scope.loadTasks = function() {
+        loadTasks = function() {
             if (taskService.getTasks().length == 0) {
                 api.tasks.search().then(function(result) {
                     $scope.tasks = result;
@@ -61,6 +62,11 @@ todoControllers.controller('TaskController', ['$scope', '$routeParams', 'taskSer
             }
         };
 
+        refreshTasks = function(){
+            taskService.clearTasks();
+            loadTasks();
+        }
+
         $scope.addAlert = function(message, type) {
             $scope.alerts.push({
                 type: type,
@@ -73,13 +79,21 @@ todoControllers.controller('TaskController', ['$scope', '$routeParams', 'taskSer
         };
 
         $scope.deleteTask = function(id) {
-            console.log('deleting task with id ' + id);
+            $scope.inProgress = true;
+            api.tasks.remove(id).then(function(result) {
+                $scope.inProgress = false;
+                $scope.addAlert('Task has been deleted', 'success');
+                refreshTasks();
+            }, function() {
+                $scope.inProgress = false;
+                $scope.addAlert('An error occurred while deleting task', 'danger');
+            });
         };
 
         $scope.editTask = function(id) {
             console.log('edit task with id ' + id);
         };
 
-        $scope.loadTasks();
+        loadTasks();
     }
 ]);

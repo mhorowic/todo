@@ -1,5 +1,6 @@
 <a data-target="#editModal" data-toggle="modal"><i style="cursor: pointer; margin: 4px;" class="glyphicon glyphicon-pencil"></i></a>
 <a data-target="#ensureModal" data-toggle="modal"><i style="cursor: pointer; margin: 4px;" class="glyphicon glyphicon-trash"></i></a>
+<i id="loading" class="glyphicon glyphicon-refresh" ng-show="$parent.inProgress"></i>
 
 <div class="modal fade" id="ensureModal">
     <div class="modal-dialog">
@@ -9,7 +10,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" ng-click="deleteAction({id: $id})">Yes</button>
+                <button type="button" class="btn btn-primary" ng-click="deleteAction({id: $id})" data-dismiss="modal">Yes</button>
             </div>
         </div>
     </div>

@@ -14,7 +14,7 @@ trait TaskServiceComponent {
 
     def create(task: Task): Int
 
-    def delete(taskId: Int): Unit
+    def delete(taskId: Int): Int
 
     def update(task: Task): Unit
 

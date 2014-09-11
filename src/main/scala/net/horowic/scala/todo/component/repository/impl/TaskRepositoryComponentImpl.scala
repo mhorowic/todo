@@ -30,7 +30,7 @@ trait TaskRepositoryComponentImpl extends TaskRepositoryComponent {
       }
     }
 
-    def delete(taskId: Int): Unit = {
+    def delete(taskId: Int): Int = {
       db withSession {
         implicit session =>
           tasks where (_.id === taskId) delete

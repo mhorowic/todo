@@ -122,8 +122,11 @@ object Main extends App with SimpleRoutingApp with DefaultJsonProtocol with Spra
                 } ~
                   delete {
                     complete {
-                      taskService.delete(id)
-                      StatusCodes.OK
+                      Thread.sleep(1500);
+                      taskService.delete(id) match {
+                        case 0 => StatusCodes.InternalServerError
+                        case 1 => StatusCodes.OK
+                      }
                     }
                   }
             }

@@ -47,7 +47,7 @@ todoApp.factory('api', ['Restangular',
                     return Restangular.one("Todo/priorities", id).get();
                 },
                 remove: function(id) {
-                    return Restangular.one('Todo/priorities', id).delete();
+                    return Restangular.one('Todo/priorities', id).remove();
                 }
             },
             tasks: {
@@ -64,7 +64,7 @@ todoApp.factory('api', ['Restangular',
                     return Restangular.one("Todo/tasks", id).get();
                 },
                 remove: function(id) {
-                    return Restangular.one('Todo/tasks', id).delete();
+                    return Restangular.one('Todo/tasks', id).remove();
                 }
             }
         };

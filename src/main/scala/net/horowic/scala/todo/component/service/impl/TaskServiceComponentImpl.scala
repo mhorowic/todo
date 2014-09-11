@@ -18,7 +18,7 @@ trait TaskServiceComponentImpl extends TaskServiceComponent {
 
     def update(task: Task): Unit = taskRepository.update(task)
 
-    def delete(taskId: Int): Unit = taskRepository.delete(taskId)
+    def delete(taskId: Int): Int = taskRepository.delete(taskId)
 
     def create(task: Task): Int = taskRepository.create(task)
 
