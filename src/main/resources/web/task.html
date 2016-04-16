@@ -1,1 +1,28 @@
-task {{ taskId }}
+<form class="form-horizontal" role="form">
+    <div class="form-group">
+        <label for="taskName">Name:</label>
+        <input type="text" class="form-control" id="taskName" ng-model="taskName">
+    </div>
+
+    <div class="form-group">
+        <label for="taskDescription">Description:</label>
+        <textarea class="form-control" id="taskDescription" ng-model="taskDescription"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="taskDueDate">Due Date:</label>
+        <input type="text" class="form-control" id="taskDueDate" ng-model="taskDueDate">
+    </div>
+
+    <div class="form-group">
+        <label for="taskPriority">Priority:</label>
+        <select class="form-control" id="taskPriority" ng-model="taskPriority"
+                ng-options="priority.name group by priority.id for priority in priorities"></select>
+    </div>
+
+    <button type="submit" class="btn btn-default" ng-click="createTask()">Save</button>
+</form>
+
+<div class="panel-body">
+    <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+</div>
